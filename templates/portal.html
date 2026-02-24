@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block content %}
+  <div class="hero">
+    <h1>Welcome, {{ user }}</h1>
+    <p class="muted">Upload your documents, photos, and sign the contract.</p>
+  </div>
+
+  <div class="grid">
+    <a class="tile" href="/docs">
+      <div class="tile-title">Documents</div>
+      <div class="tile-meta">{{ docs_count }} file(s){% if attention_docs and attention_docs > 0 %} • <span class="badge warn">{{ attention_docs }} need attention</span>{% endif %}</div>
+    </a>
+    <a class="tile" href="/photos">
+      <div class="tile-title">Truck & Trailer Photos</div>
+      <div class="tile-meta">{{ photos_count }} file(s)</div>
+    </a>
+    <a class="tile" href="/contract">
+      <div class="tile-title">Contract</div>
+      <div class="tile-meta">{{ contract_count }} record(s)</div>
+    </a>
+    <a class="tile" href="/settings">
+      <div class="tile-title">Settings</div>
+      <div class="tile-meta">Push + Chat</div>
+    </a>
+  </div>
+
+  <div class="card">
+    <h2>Quick tips</h2>
+    <ul class="list">
+      <li>On iPhone: open in Safari → Share → <b>Add to Home Screen</b>.</li>
+      <li>Use your phone camera to upload clear photos.</li>
+      <li>If a file name repeats, the portal auto-renames it.</li>
+    </ul>
+  </div>
+{% endblock %}

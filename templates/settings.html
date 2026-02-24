@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block content %}
+  <div class="row">
+    <h1>Settings</h1>
+    <a class="btn ghost" href="/portal">Back</a>
+  </div>
+
+  {% if request.query_params.get('reminders') %}
+  <div class="alert">{{ request.query_params.get('reminders') }}</div>
+{% endif %}
+{% if request.query_params.get('push') %}
+  <div class="alert">{{ request.query_params.get('push') }}</div>
+{% endif %}
+
+<div class="card">
+    <h2>Push notifications</h2>
+    <p class="muted">Enable notifications to receive reminders about documents and messages from dispatch (push + fallback email later).</p>
+
+    {% if not vapid_public %}
+      <div class="alert">Push is not configured on the server yet. Set <span class="kbd">VAPID_PUBLIC_KEY</span> and <span class="kbd">VAPID_PRIVATE_KEY</span> environment variables.</div>
+    {% else %}
+      <div class="row" style="justify-content:flex-start;gap:10px">
+        <button class="btn primary" id="btnEnable">Enable notifications</button>
+        <button class="btn ghost" id="btnDisable">Disable</button>
+        <form method="post" action="/push/test" style="display:inline">
+          <button class="btn ghost" type="submit">Send test push</button>
+        </form>
+        <form method="post" action="/reminders/run" style="display:inline">
+          <button class="btn ghost" type="submit">Run reminder check now</button>
+        </form>
+      </div>
+      <p class="muted small">If you are on iPhone: open portal in Safari → Share → <b>Add to Home Screen</b>, then open from the icon and enable notifications.</p>
+      <script>
+        const vapidPublic = "{{ vapid_public }}";
+        document.getElementById('btnEnable')?.addEventListener('click', async () => {
+          try {
+            await window.MNPush.enable(vapidPublic);
+            alert("✅ Notifications enabled");
+          } catch (e) {
+            alert("❌ " + (e.message || e));
+          }
+        });
+        document.getElementById('btnDisable')?.addEventListener('click', async () => {
+          try {
+            await window.MNPush.disable();
+            alert("✅ Notifications disabled");
+          } catch (e) {
+            alert("❌ " + (e.message || e));
+          }
+        });
+      </script>
+    {% endif %}
+  </div>
+
+  <div class="card">
+    <h2>Support chat</h2>
+    {% if tawk_src %}
+      <p class="muted">Chat is enabled. The chat bubble appears in the bottom corner for logged-in drivers.</p>
+    {% else %}
+      <div class="alert">Chat is not configured yet. Set <span class="kbd">TAWK_SRC</span> to your Tawk.to embed URL (example: <span class="kbd">https://embed.tawk.to/XXXX/default</span>).</div>
+    {% endif %}
+  </div>
+{% endblock %}

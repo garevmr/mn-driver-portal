@@ -1,0 +1,15 @@
+{
+  "name": "M&N Driver Portal",
+  "short_name": "M&N Driver",
+  "start_url": "/portal",
+  "display": "standalone",
+  "background_color": "#071a12",
+  "theme_color": "#071a12",
+  "icons": [
+    {
+      "src": "/static/logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

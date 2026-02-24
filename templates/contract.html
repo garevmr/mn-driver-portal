@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block content %}
+  <div class="row">
+    <h1>Contract</h1>
+    <a class="btn ghost" href="/portal">Back</a>
+  </div>
+
+  {% if request.query_params.get('signed') %}
+    <div class="alert">{{ request.query_params.get('signed') }}</div>
+  {% endif %}
+
+  <div class="card">
+    <h2>Sign the contract (demo)</h2>
+    <p class="muted">This demo stores a signed receipt record. We can upgrade to PDF + signature pad next.</p>
+    <form class="form" method="post" action="/contract/sign">
+      <label>
+        Full name
+        <input name="full_name" placeholder="Your legal name" required />
+      </label>
+      <label class="check">
+        <input type="checkbox" name="agree" />
+        I have read and agree to the contract terms.
+      </label>
+      <button class="btn primary" type="submit">Sign</button>
+    </form>
+  </div>
+
+  <div class="card">
+    <h2>Signed records</h2>
+    {% if files|length == 0 %}
+      <p class="muted">No signatures yet.</p>
+    {% else %}
+      <div class="table">
+        <div class="thead">
+          <div>Record</div><div>Size</div><div>Updated</div><div></div>
+        </div>
+        {% for f in files %}
+          <div class="trow">
+            <div class="mono">{{ f.name }}</div>
+            <div>{{ (f.size/1024)|round(1) }} KB</div>
+            <div class="muted">{{ f.mtime.strftime('%Y-%m-%d %H:%M') }}</div>
+            <div><a class="btn small ghost" href="/download/contract/{{ f.name }}">Download</a></div>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+{% endblock %}

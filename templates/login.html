@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+  <div class="card auth">
+    <h1>Driver Login</h1>
+    <p class="muted">Demo credentials: <b>driver / driver</b></p>
+    {% if request.query_params.get('error') %}
+      <div class="alert">{{ request.query_params.get('error') }}</div>
+    {% endif %}
+    <form method="post" action="/login" class="form">
+      <label>
+        Username
+        <input name="username" placeholder="driver" autocomplete="username" required />
+      </label>
+      <label>
+        Password
+        <input type="password" name="password" placeholder="driver" autocomplete="current-password" required />
+      </label>
+      <button class="btn primary" type="submit">Sign in</button>
+    </form>
+  </div>
+{% endblock %}

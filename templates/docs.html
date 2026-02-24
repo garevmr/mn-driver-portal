@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block content %}
+  <div class="row">
+    <h1>Documents</h1>
+    <a class="btn ghost" href="/portal">Back</a>
+  </div>
+
+  <div class="card">
+    <h2>Upload a document</h2>
+    <form class="form" method="post" action="/docs/upload" enctype="multipart/form-data">
+  <label>Document type
+    <input name="doc_type" placeholder="CDL / Insurance / Medical card / W-9" required />
+  </label>
+  <label>Expiration date
+    <input name="expires_on" type="date" required />
+  </label>
+      <input type="file" name="file" required />
+      <button class="btn primary" type="submit">Upload</button>
+    </form>
+    <p class="muted small">Examples: CDL, Insurance, Medical card, W-9, etc. (Demo max 25MB)</p>
+  </div>
+
+  <div class="card">
+    <h2>Your files</h2>
+    {% if files|length == 0 %}
+      <p class="muted">No documents yet.</p>
+    {% else %}
+      <div class="table">
+        <div class="thead">
+          <div>Type / File</div><div>Expires</div><div>Updated</div><div></div>
+        </div>
+        {% for f in files %}
+          <div class="trow">
+            <div>
+              <div style="font-weight:900">{{ f.doc_type or "Document" }}</div>
+              <div class="mono muted">{{ f.name }}</div>
+            </div>
+            <div class="mono">{{ f.expires_on or "-" }}</div>
+            <div class="muted">{{ f.mtime.strftime('%Y-%m-%d %H:%M') }}</div>
+            <div><a class="btn small ghost" href="/download/docs/{{ f.name }}">Download</a></div>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+{% endblock %}

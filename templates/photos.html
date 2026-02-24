@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block content %}
+  <div class="row">
+    <h1>Truck & Trailer Photos</h1>
+    <a class="btn ghost" href="/portal">Back</a>
+  </div>
+
+  <div class="card">
+    <h2>Upload photo</h2>
+    <form class="form" method="post" action="/photos/upload" enctype="multipart/form-data">
+      <input type="file" name="file" accept="image/*" capture="environment" required />
+      <button class="btn primary" type="submit">Upload</button>
+    </form>
+    <p class="muted small">Tip: take photos in good light (front/side of truck + trailer).</p>
+  </div>
+
+  <div class="card">
+    <h2>Your photos</h2>
+    {% if files|length == 0 %}
+      <p class="muted">No photos yet.</p>
+    {% else %}
+      <div class="table">
+        <div class="thead">
+          <div>File</div><div>Size</div><div>Updated</div><div></div>
+        </div>
+        {% for f in files %}
+          <div class="trow">
+            <div class="mono">{{ f.name }}</div>
+            <div>{{ (f.size/1024)|round(1) }} KB</div>
+            <div class="muted">{{ f.mtime.strftime('%Y-%m-%d %H:%M') }}</div>
+            <div><a class="btn small ghost" href="/download/photos/{{ f.name }}">Download</a></div>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+{% endblock %}
